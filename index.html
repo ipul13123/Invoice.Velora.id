@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Velora.id - Invoice Nota Digital</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-label="Editor nota">
+        <aside class="editor-panel no-print">
+          <div class="brand-row">
+            <img class="brand-mark" src="./assets/logo.jpeg" alt="Logo Velora.id">
+            <div>
+              <p class="eyebrow">Admin Velora.id</p>
+              <h1>Invoice Nota Digital</h1>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="primary" type="button" id="printBtn">Cetak / PDF</button>
+            <button type="button" id="saveBtn">Simpan Draft</button>
+            <button type="button" id="resetBtn">Nota Baru</button>
+          </div>
+
+          <form id="invoiceForm" autocomplete="off">
+            <section class="form-section">
+              <h2>Detail Nota</h2>
+              <div class="grid two">
+                <label>
+                  Nomor nota
+                  <input id="invoiceNumber" name="invoiceNumber" type="text" value="VEL-2026-001">
+                </label>
+                <label>
+                  Tanggal nota
+                  <input id="invoiceDate" name="invoiceDate" type="date">
+                </label>
+                <label>
+                  Status pembayaran
+                  <select id="paymentStatus" name="paymentStatus">
+                    <option value="Belum dibayar">Belum dibayar</option>
+                    <option value="DP diterima">DP diterima</option>
+                    <option value="Lunas">Lunas</option>
+                  </select>
+                </label>
+                <label>
+                  Metode pembayaran
+                  <input id="paymentMethod" name="paymentMethod" type="text" value="Transfer / Tunai">
+                </label>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2>Data Pelanggan</h2>
+              <div class="grid two">
+                <label>
+                  Nama pelanggan
+                  <input id="customerName" name="customerName" type="text" value="Nama Pelanggan">
+                </label>
+                <label>
+                  Nomor WhatsApp
+                  <input id="customerPhone" name="customerPhone" type="text" value="08xxxxxxxxxx">
+                </label>
+                <label class="wide">
+                  Alamat pemasangan / pengiriman
+                  <textarea id="customerAddress" name="customerAddress" rows="3">Alamat lengkap acara atau pengiriman</textarea>
+                </label>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2>Detail Sewa</h2>
+              <div class="grid two">
+                <label>
+                  Nama acara
+                  <input id="eventName" name="eventName" type="text" value="Wedding / Grand Opening / Ulang Tahun">
+                </label>
+                <label>
+                  Tanggal acara
+                  <input id="eventDate" name="eventDate" type="date">
+                </label>
+                <label>
+                  Tanggal kirim / pasang
+                  <input id="deliveryDate" name="deliveryDate" type="date">
+                </label>
+                <label>
+                  Tanggal ambil / kembali
+                  <input id="returnDate" name="returnDate" type="date">
+                </label>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="section-head">
+                <h2>Item Sewa</h2>
+                <button class="small" type="button" id="addItemBtn">Tambah Item</button>
+              </div>
+              <div class="item-editor" id="itemsEditor" aria-live="polite"></div>
+            </section>
+
+            <section class="form-section">
+              <h2>Biaya & Catatan</h2>
+              <div class="grid three">
+                <label>
+                  Ongkir / pasang
+                  <input id="shippingFee" name="shippingFee" type="number" min="0" step="1000" value="50000">
+                </label>
+                <label>
+                  Diskon
+                  <input id="discount" name="discount" type="number" min="0" step="1000" value="0">
+                </label>
+                <label>
+                  DP dibayar
+                  <input id="downPayment" name="downPayment" type="number" min="0" step="1000" value="0">
+                </label>
+                <label class="wide">
+                  Catatan nota
+                  <textarea id="notes" name="notes" rows="3">Mohon simpan bukti pembayaran. Harga sudah termasuk sewa papan ucapan sesuai item di nota.</textarea>
+                </label>
+                <label class="wide">
+                  Rekening pembayaran
+                  <textarea id="bankInfo" name="bankInfo" rows="2">BCA 0000000000 a.n. Velora.id</textarea>
+                </label>
+              </div>
+            </section>
+          </form>
+        </aside>
+
+        <section class="invoice-stage">
+          <article class="invoice-paper" id="invoicePaper" aria-label="Preview nota">
+            <img class="watermark-logo" src="./assets/logo.jpeg" alt="">
+            <header class="invoice-header">
+              <div class="company">
+                <img class="logo-badge" src="./assets/logo.jpeg" alt="Logo Velora.id">
+                <div>
+                  <p class="company-type">Penyewaan Papan Ucapan Akrilik</p>
+                  <h2>Velora.id</h2>
+                  <p>Beauty Reflections</p>
+                </div>
+              </div>
+              <div class="invoice-meta">
+                <p>INVOICE</p>
+                <strong id="previewInvoiceNumber">VEL-2026-001</strong>
+                <span id="previewInvoiceDate">15 Juni 2026</span>
+                <div class="auth-seal">
+                  <span>Kode Keaslian</span>
+                  <strong id="previewAuthCode">VEL-000000</strong>
+                </div>
+              </div>
+            </header>
+
+            <section class="auth-banner">
+              <div>
+                <span>Nota resmi Velora.id</span>
+                <strong id="previewAuthLine">Kode verifikasi dibuat otomatis dari isi nota.</strong>
+              </div>
+              <div>
+                <span>Waktu cetak</span>
+                <strong id="previewPrintedAt">-</strong>
+              </div>
+            </section>
+
+            <section class="summary-strip">
+              <div>
+                <span>Status</span>
+                <strong id="previewStatus">Belum dibayar</strong>
+              </div>
+              <div>
+                <span>Total Tagihan</span>
+                <strong id="previewGrandTotal">Rp0</strong>
+              </div>
+              <div>
+                <span>Sisa Bayar</span>
+                <strong id="previewRemaining">Rp0</strong>
+              </div>
+            </section>
+
+            <section class="invoice-grid">
+              <div>
+                <h3>Ditagihkan kepada</h3>
+                <p class="strong" id="previewCustomerName">Nama Pelanggan</p>
+                <p id="previewCustomerPhone">08xxxxxxxxxx</p>
+                <p id="previewCustomerAddress">Alamat lengkap acara atau pengiriman</p>
+              </div>
+              <div>
+                <h3>Detail acara</h3>
+                <p><span>Acara</span><strong id="previewEventName">Wedding / Grand Opening / Ulang Tahun</strong></p>
+                <p><span>Tanggal acara</span><strong id="previewEventDate">-</strong></p>
+                <p><span>Kirim / pasang</span><strong id="previewDeliveryDate">-</strong></p>
+                <p><span>Ambil / kembali</span><strong id="previewReturnDate">-</strong></p>
+              </div>
+            </section>
+
+            <section class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item sewa</th>
+                    <th>Durasi</th>
+                    <th class="number">Qty</th>
+                    <th class="number">Harga</th>
+                    <th class="number">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="previewItems"></tbody>
+              </table>
+            </section>
+
+            <section class="totals-block">
+              <div class="notes-box">
+                <h3>Catatan</h3>
+                <p id="previewNotes">Mohon simpan bukti pembayaran.</p>
+                <h3>Pembayaran</h3>
+                <p id="previewBankInfo">BCA 0000000000 a.n. Velora.id</p>
+                <p><span>Metode:</span> <strong id="previewPaymentMethod">Transfer / Tunai</strong></p>
+              </div>
+              <div class="totals-table">
+                <p><span>Subtotal item</span><strong id="previewSubtotal">Rp0</strong></p>
+                <p><span>Ongkir / pasang</span><strong id="previewShipping">Rp0</strong></p>
+                <p><span>Diskon</span><strong id="previewDiscount">Rp0</strong></p>
+                <p class="grand"><span>Total</span><strong id="previewTotal">Rp0</strong></p>
+                <p><span>DP dibayar</span><strong id="previewDownPayment">Rp0</strong></p>
+                <p class="remaining"><span>Sisa bayar</span><strong id="previewRemainingBottom">Rp0</strong></p>
+              </div>
+            </section>
+
+            <footer class="invoice-footer">
+              <div>
+                <p>Terima kasih sudah mempercayakan momen spesial Anda kepada Velora.id.</p>
+                <p class="fineprint">Nota ini memuat watermark, logo resmi, waktu cetak, dan kode keaslian. Cocokkan kode bila ada perubahan nilai nota.</p>
+              </div>
+              <div class="signature">
+                <span>Admin Velora.id</span>
+              </div>
+            </footer>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
