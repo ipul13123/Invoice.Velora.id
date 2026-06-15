@@ -54,7 +54,7 @@ body {
 /* BUTTONS */
 .btn-row {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr auto;
   gap: 7px;
   margin-bottom: 14px;
 }
@@ -81,6 +81,19 @@ button { font: inherit; cursor: pointer; border-radius: 7px; border: 1px solid v
   border: 1px solid var(--rose); border-radius: 5px;
   padding: 2px 8px; font-size: 12px; font-weight: 700;
   cursor: pointer; margin-left: auto; float: right;
+}
+
+/* ③ Tombol WhatsApp */
+.btn-wa {
+  background: #25D366;
+  color: #fff;
+  border-color: #1ebe5d;
+  padding: 9px 10px;
+  font-weight: 700;
+  font-size: 13px;
+}
+.btn-wa:hover {
+  background: #1da851;
 }
 
 /* FORM */
@@ -112,7 +125,6 @@ label {
   color: var(--muted);
 }
 
-/* ── Transparent placeholder – value stays visible, placeholder fades ── */
 input, textarea, select {
   font: inherit;
   border: 1px solid var(--line);
@@ -125,13 +137,11 @@ input, textarea, select {
   outline: none;
 }
 
-/* Placeholder transparan (warna muted, tidak perlu hapus manual) */
 input::placeholder, textarea::placeholder {
   color: #b0bcb6;
   opacity: 1;
 }
 
-/* Override default value warna – value awal jadi muted agar terasa seperti placeholder */
 input.is-placeholder, textarea.is-placeholder {
   color: #b0bcb6;
 }
@@ -175,11 +185,11 @@ textarea { resize: vertical; }
   align-items: flex-start;
 }
 
-/* ─── NOTA (INVOICE PAPER) – ukuran 10,5 cm × 16,5 cm ─── */
+/* ─── NOTA PREVIEW (screen) ─── */
 .nota {
   position: relative;
-  width: 396px;        /* 10.5cm @ 96dpi ≈ 396px */
-  min-height: 623px;   /* 16.5cm @ 96dpi ≈ 623px */
+  width: 396px;
+  min-height: 623px;
   background: var(--paper);
   border-radius: 8px;
   box-shadow: 0 8px 40px rgba(60,20,40,0.12);
@@ -392,73 +402,7 @@ textarea { resize: vertical; }
   color: var(--ink);
 }
 
-/* ─── PRINT – ukuran 10,5 cm × 16,5 cm ─── */
-@media print {
-  @page {
-    size: 105mm 165mm;
-    margin: 4mm 5mm;
-  }
-
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-  body { background: #fff; }
-
-  .no-print { display: none !important; }
-
-  .shell { display: block; }
-  .stage { padding: 0; display: block; }
-
-  .nota {
-    width: 100%;
-    min-height: auto;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-    font-size: 8px;
-  }
-
-  .watermark { font-size: 55px; }
-  .nota-header { padding-bottom: 5px; margin-bottom: 5px; }
-  .nota-logo { width: 28px; height: 28px; }
-  .nota-name { font-size: 11px; }
-  .meta-number { font-size: 10px; }
-  .status-bar { margin-bottom: 5px; }
-  .status-item { padding: 3px 5px; }
-  .status-item strong { font-size: 7.5px; }
-  .info-grid { gap: 5px; margin-bottom: 5px; }
-  .info-box { padding: 5px 6px; }
-  .item-table { font-size: 7.5px; margin-bottom: 5px; }
-  .item-table th { font-size: 6.5px; padding: 3px 5px; }
-  .item-table td { padding: 3px 5px; }
-  .bottom-grid { gap: 7px; margin-bottom: 5px; grid-template-columns: 1fr 130px; }
-  .total-row { padding: 3px 6px; font-size: 7.5px; }
-  .total-row.grand { font-size: 8.5px; }
-  .nota-footer { padding-top: 5px; font-size: 7px; }
-  .sign-block { min-width: 80px; font-size: 7.5px; }
-  .status-bar, .info-grid, .item-table, .totals-col { break-inside: avoid; }
-}
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 900px) {
-  .shell { grid-template-columns: 1fr; }
-  .panel { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
-  .stage { padding: 16px 12px; }
-  .nota { width: 100%; max-width: 420px; }
-}
-
-@media (max-width: 600px) {
-  .status-bar { grid-template-columns: 1fr 1fr; }
-  .info-grid { grid-template-columns: 1fr; }
-  .bottom-grid { grid-template-columns: 1fr; }
-  .row2, .row3 { grid-template-columns: 1fr; }
-  .span2, .span3 { grid-column: 1; }
-  .item-row { grid-template-columns: 1fr 1fr; }
-  .nota { padding: 14px; }
-}
-
-/* ─── FASE 1 ADDITIONS ─── */
-
-/* ① Nomor nota auto badge */
+/* ─── NOTA AUTO BADGE ─── */
 .input-with-badge {
   position: relative;
 }
@@ -481,7 +425,7 @@ textarea { resize: vertical; }
   letter-spacing: 0.04em;
 }
 
-/* ② Status chip berwarna di preview nota */
+/* ─── STATUS CHIP ─── */
 .status-chip {
   display: inline-block;
   padding: 2px 7px;
@@ -492,32 +436,127 @@ textarea { resize: vertical; }
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-/* ③ Tombol WhatsApp */
-.btn-row {
-  grid-template-columns: 1fr 1fr 1fr auto;
-}
-.btn-wa {
-  background: #25D366;
-  color: #fff;
-  border-color: #1ebe5d;
-  padding: 9px 10px;
-  font-weight: 700;
-  font-size: 13px;
-}
-.btn-wa:hover {
-  background: #1da851;
-}
-
-/* Status bar border animation saat status berubah */
 #statusBar {
   transition: border-top 0.3s;
 }
 
-/* Print: sembunyikan animasi warna agar tidak bermasalah */
+/* ─── GARIS PEMISAH PADA PRINT 2-UP ─── */
+.print-divider {
+  display: none;
+}
+
+/* ─── PRINT: 2 NOTA PER KERTAS HVS A4 ─── */
 @media print {
-  .status-chip {
-    border: 1px solid currentColor;
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
   }
+
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body { background: #fff; }
+
+  .no-print { display: none !important; }
+
+  .shell { display: block; }
+
+  /* Stage menjadi container 2-up */
+  .stage {
+    padding: 0;
+    display: block;
+  }
+
+  /* Wrapper 2 nota sejajar vertikal */
+  .print-2up {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    height: 277mm; /* tinggi A4 dikurangi margin */
+  }
+
+  /* Garis potong di tengah */
+  .print-divider {
+    display: block;
+    width: 100%;
+    border: none;
+    border-top: 1.5px dashed #bbb;
+    margin: 2mm 0;
+    position: relative;
+  }
+  .print-divider::before {
+    content: "✂";
+    position: absolute;
+    left: 50%;
+    top: -8px;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #bbb;
+    background: #fff;
+    padding: 0 4px;
+  }
+
+  /* Setiap nota mengisi setengah halaman */
+  .nota {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 5mm 6mm 4mm;
+    font-size: 7.5px;
+    overflow: hidden;
+    background: #fff;
+    page-break-inside: avoid;
+  }
+
+  .watermark { font-size: 50px; }
+  .nota-header { padding-bottom: 4px; margin-bottom: 5px; }
+  .nota-logo { width: 26px; height: 26px; }
+  .nota-name { font-size: 10px; }
+  .nota-tagline { font-size: 6.5px; }
+  .meta-number { font-size: 9.5px; }
+  .meta-date { font-size: 6.5px; }
+  .auth-chip { font-size: 6.5px; }
+  .status-bar { margin-bottom: 4px; }
+  .status-item { padding: 3px 4px; }
+  .status-item span { font-size: 6px; }
+  .status-item strong { font-size: 7px; }
+  .status-chip { font-size: 7px; padding: 1px 5px; border: 1px solid currentColor; }
+  .info-grid { gap: 4px; margin-bottom: 5px; }
+  .info-box { padding: 4px 5px; }
+  .info-title { font-size: 6px; margin-bottom: 2px; }
+  .info-strong { font-size: 8px; }
+  .info-row { font-size: 7px; margin-bottom: 1px; }
+  .item-table { font-size: 7px; margin-bottom: 5px; }
+  .item-table th { font-size: 6px; padding: 3px 4px; }
+  .item-table td { padding: 3px 4px; }
+  .bottom-grid { gap: 6px; margin-bottom: 4px; grid-template-columns: 1fr 125px; }
+  .total-row { padding: 2.5px 5px; font-size: 7px; }
+  .total-row.grand { font-size: 8px; }
+  .total-row.sisa { font-size: 7px; }
+  .notes-col p { font-size: 7px; }
+  .nota-footer { padding-top: 4px; font-size: 6.5px; }
+  .sign-block { min-width: 70px; font-size: 7px; }
+
+  /* Sembunyikan elemen yang tidak perlu */
   .btn-wa { display: none !important; }
   .auto-badge { display: none; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .panel { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+  .stage { padding: 16px 12px; }
+  .nota { width: 100%; max-width: 420px; }
+}
+
+@media (max-width: 600px) {
+  .status-bar { grid-template-columns: 1fr 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  .bottom-grid { grid-template-columns: 1fr; }
+  .row2, .row3 { grid-template-columns: 1fr; }
+  .span2, .span3 { grid-column: 1; }
+  .item-row { grid-template-columns: 1fr 1fr; }
+  .nota { padding: 14px; }
 }
