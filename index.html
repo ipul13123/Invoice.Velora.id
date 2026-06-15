@@ -23,8 +23,9 @@
 
     <div class="btn-row">
       <button class="btn-primary" id="printBtn">🖨 Cetak / PDF</button>
+      <button class="btn-wa"      id="waBtn">💬 WhatsApp</button>
       <button class="btn-outline" id="saveBtn">💾 Simpan</button>
-      <button class="btn-ghost" id="resetBtn">Baru</button>
+      <button class="btn-ghost"   id="resetBtn">Baru</button>
     </div>
 
     <form id="invoiceForm" autocomplete="off">
@@ -32,7 +33,12 @@
       <fieldset>
         <legend>Detail Nota</legend>
         <div class="row2">
-          <label>No. Nota<input id="invoiceNumber" name="invoiceNumber" type="text" value="VEL-2026-001"></label>
+          <label>No. Nota
+            <div class="input-with-badge">
+              <input id="invoiceNumber" name="invoiceNumber" type="text" value="VEL-2026-001">
+              <span class="auto-badge">AUTO</span>
+            </div>
+          </label>
           <label>Tanggal<input id="invoiceDate" name="invoiceDate" type="date"></label>
           <label>Status
             <select id="paymentStatus" name="paymentStatus">
@@ -105,7 +111,7 @@
         <div class="nota-meta">
           <div class="meta-label">INVOICE</div>
           <div class="meta-number" id="previewInvoiceNumber">VEL-2026-001</div>
-          <div class="meta-date" id="previewInvoiceDate">—</div>
+          <div class="meta-date"   id="previewInvoiceDate">—</div>
           <div class="auth-chip">
             <span>Kode:</span>
             <strong id="previewAuthCode">VEL-0000000</strong>
@@ -114,10 +120,11 @@
       </header>
 
       <!-- STATUS BAR -->
-      <div class="status-bar">
+      <div class="status-bar" id="statusBar">
         <div class="status-item">
           <span>Status</span>
-          <strong id="previewStatus">Belum dibayar</strong>
+          <!-- ② chip berwarna -->
+          <strong><span id="previewStatusChip" class="status-chip">Belum dibayar</span></strong>
         </div>
         <div class="status-item">
           <span>Total</span>

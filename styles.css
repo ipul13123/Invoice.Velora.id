@@ -455,3 +455,69 @@ textarea { resize: vertical; }
   .item-row { grid-template-columns: 1fr 1fr; }
   .nota { padding: 14px; }
 }
+
+/* ─── FASE 1 ADDITIONS ─── */
+
+/* ① Nomor nota auto badge */
+.input-with-badge {
+  position: relative;
+}
+.input-with-badge input {
+  padding-right: 46px;
+}
+.auto-badge {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  font-weight: 900;
+  background: var(--rose-light);
+  color: var(--rose);
+  border: 1px solid var(--rose);
+  border-radius: 4px;
+  padding: 1px 5px;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+/* ② Status chip berwarna di preview nota */
+.status-chip {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* ③ Tombol WhatsApp */
+.btn-row {
+  grid-template-columns: 1fr 1fr 1fr auto;
+}
+.btn-wa {
+  background: #25D366;
+  color: #fff;
+  border-color: #1ebe5d;
+  padding: 9px 10px;
+  font-weight: 700;
+  font-size: 13px;
+}
+.btn-wa:hover {
+  background: #1da851;
+}
+
+/* Status bar border animation saat status berubah */
+#statusBar {
+  transition: border-top 0.3s;
+}
+
+/* Print: sembunyikan animasi warna agar tidak bermasalah */
+@media print {
+  .status-chip {
+    border: 1px solid currentColor;
+  }
+  .btn-wa { display: none !important; }
+  .auto-badge { display: none; }
+}
