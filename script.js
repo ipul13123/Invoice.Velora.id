@@ -26,9 +26,28 @@ function authCode(payload) {
   return "VEL-" + (h >>> 0).toString(36).toUpperCase().padStart(7,"0").slice(0,7);
 }
 
-function set(id, v) { const el = $(id); if (el) el.textContent = v ?? "—"; }
+/* Set text content — update both nota 1 and nota 2 */
+function set(id, v) {
+  const el = $(id);
+  if (el) el.textContent = v ?? "—";
+  // Mirror to nota 2 (append "2" to id)
+  const el2 = $(id + "2");
+  if (el2) el2.textContent = v ?? "—";
+}
 
-/* ── ① NOMOR NOTA OTOMATIS ── */
+/* Set only nota 1 */
+function set1(id, v) {
+  const el = $(id);
+  if (el) el.textContent = v ?? "—";
+}
+
+/* Set only nota 2 */
+function set2(id, v) {
+  const el = $(id + "2");
+  if (el) el.textContent = v ?? "—";
+}
+
+/* ── NOMOR NOTA OTOMATIS ── */
 function getNextInvoiceNumber() {
   const stored = localStorage.getItem("velora_invoice_counter");
   const counter = stored ? parseInt(stored, 10) : 0;
@@ -45,13 +64,12 @@ function bumpInvoiceCounter() {
 
 function initInvoiceNumber() {
   const invEl = $("invoiceNumber");
-  // Hanya generate nomor baru jika field masih default atau kosong
   if (!invEl.value || invEl.value === "VEL-2026-001") {
     invEl.value = getNextInvoiceNumber();
   }
 }
 
-/* ── ② WARNA STATUS BAYAR ── */
+/* ── WARNA STATUS BAYAR ── */
 const STATUS_COLORS = {
   "Belum dibayar": { bg: "#fff0f0", text: "#c0392b", border: "#e74c3c" },
   "DP diterima":   { bg: "#fffbe6", text: "#856404", border: "#f0c040" },
@@ -59,19 +77,32 @@ const STATUS_COLORS = {
 };
 
 function applyStatusColor(statusText) {
-  const bar  = $("statusBar");
-  const chip = $("previewStatusChip");
-  const cfg  = STATUS_COLORS[statusText] || STATUS_COLORS["Belum dibayar"];
-  if (bar)  { bar.style.borderTop = `3px solid ${cfg.border}`; }
-  if (chip) {
-    chip.style.background   = cfg.bg;
-    chip.style.color        = cfg.text;
-    chip.style.border       = `1px solid ${cfg.border}`;
-    chip.textContent        = statusText;
+  const cfg = STATUS_COLORS[statusText] || STATUS_COLORS["Belum dibayar"];
+
+  // Nota 1
+  const bar1  = $("statusBar");
+  const chip1 = $("previewStatusChip");
+  if (bar1)  bar1.style.borderTop = `3px solid ${cfg.border}`;
+  if (chip1) {
+    chip1.style.background = cfg.bg;
+    chip1.style.color      = cfg.text;
+    chip1.style.border     = `1px solid ${cfg.border}`;
+    chip1.textContent      = statusText;
+  }
+
+  // Nota 2
+  const bar2  = $("statusBar2");
+  const chip2 = $("previewStatusChip2");
+  if (bar2)  bar2.style.borderTop = `3px solid ${cfg.border}`;
+  if (chip2) {
+    chip2.style.background = cfg.bg;
+    chip2.style.color      = cfg.text;
+    chip2.style.border     = `1px solid ${cfg.border}`;
+    chip2.textContent      = statusText;
   }
 }
 
-/* ── ③ KIRIM VIA WHATSAPP ── */
+/* ── KIRIM VIA WHATSAPP ── */
 function buildWAMessage() {
   const invNo   = val("invoiceNumber");
   const cust    = val("customerName");
@@ -131,7 +162,6 @@ Terima kasih telah mempercayakan momen spesial Anda kepada Velora.id 🌸`;
 
 function sendWhatsApp() {
   const phone = val("customerPhone").replace(/\D/g,"");
-  // Normalize nomor: 08xx → 628xx
   const intlPhone = phone.startsWith("0") ? "62" + phone.slice(1) : phone;
   const msg = buildWAMessage();
   const url = `https://wa.me/${intlPhone}?text=${encodeURIComponent(msg)}`;
@@ -188,7 +218,17 @@ function renderEditor() {
   });
 }
 
-/* ── Render preview ── */
+/* ── Helper: build item rows HTML ── */
+function buildItemRows() {
+  let html = "";
+  items.forEach(it => {
+    const s = num(it.qty) * num(it.price);
+    html += `<tr><td>${esc(it.name||"—")}</td><td>${esc(it.duration||"—")}</td><td class="r">${num(it.qty)}</td><td class="r">${rp.format(num(it.price))}</td><td class="r">${rp.format(s)}</td></tr>`;
+  });
+  return html;
+}
+
+/* ── Render preview (both notas) ── */
 function render() {
   const sub   = items.reduce((s, it) => s + num(it.qty) * num(it.price), 0);
   const ship  = num(val("shippingFee"));
@@ -199,32 +239,46 @@ function render() {
 
   const payload = JSON.stringify({ inv: val("invoiceNumber"), date: val("invoiceDate"), cust: val("customerName"), total, sisa, items });
   const code = authCode(payload);
+  const now  = fmtDateTime(new Date());
+  const invNo = val("invoiceNumber");
+  const invDate = parseDate(val("invoiceDate"));
 
-  set("previewInvoiceNumber", val("invoiceNumber"));
-  set("previewInvoiceDate",   parseDate(val("invoiceDate")));
-  set("previewPrintedAt",     fmtDateTime(new Date()));
+  /* ── Update both copies ── */
+  ["", "2"].forEach(sfx => {
+    const s = (id) => { const el = $(id + sfx); if (el) el.textContent = arguments[1] ?? "—"; };
+    // We'll use individual set calls below
+  });
+
+  // Header
+  set("previewInvoiceNumber", invNo);
+  set("previewInvoiceDate",   invDate);
+  set("previewPrintedAt",     now);
   set("previewAuthCode",      code);
 
+  // Totals summary bar
   set("previewGrandTotal",  rp.format(total));
   set("previewRemaining",   rp.format(sisa));
 
-  // ② Terapkan warna status
-  const statusVal = val("paymentStatus");
-  set("previewStatus", statusVal);
-  applyStatusColor(statusVal);
+  // Status chip (handled by applyStatusColor)
+  applyStatusColor(val("paymentStatus"));
 
+  // Customer
   set("previewCustomerName",    val("customerName"));
   set("previewCustomerPhone",   val("customerPhone"));
   set("previewCustomerAddress", val("customerAddress"));
-  set("previewEventName",       val("eventName"));
-  set("previewEventDate",       parseDate(val("eventDate")));
-  set("previewDeliveryDate",    parseDate(val("deliveryDate")));
-  set("previewReturnDate",      parseDate(val("returnDate")));
 
+  // Event
+  set("previewEventName",     val("eventName"));
+  set("previewEventDate",     parseDate(val("eventDate")));
+  set("previewDeliveryDate",  parseDate(val("deliveryDate")));
+  set("previewReturnDate",    parseDate(val("returnDate")));
+
+  // Notes / payment
   set("previewNotes",         val("notes"));
   set("previewBankInfo",      val("bankInfo"));
   set("previewPaymentMethod", val("paymentMethod"));
 
+  // Totals block
   set("previewSubtotal",        rp.format(sub));
   set("previewShipping",        rp.format(ship));
   set("previewDiscount",        "- " + rp.format(disc));
@@ -232,14 +286,20 @@ function render() {
   set("previewDownPayment",     rp.format(dp));
   set("previewRemainingBottom", rp.format(sisa));
 
-  const tbody = $("previewItems");
-  tbody.innerHTML = "";
-  items.forEach(it => {
-    const tr = document.createElement("tr");
-    const s = num(it.qty) * num(it.price);
-    tr.innerHTML = `<td>${esc(it.name||"—")}</td><td>${esc(it.duration||"—")}</td><td class="r">${num(it.qty)}</td><td class="r">${rp.format(num(it.price))}</td><td class="r">${rp.format(s)}</td>`;
-    tbody.appendChild(tr);
-  });
+  // Items table – both copies
+  const itemRowsHTML = buildItemRows();
+  const tbody1 = $("previewItems");
+  const tbody2 = $("previewItems2");
+  if (tbody1) tbody1.innerHTML = itemRowsHTML;
+  if (tbody2) tbody2.innerHTML = itemRowsHTML;
+}
+
+/* Override set() to handle both notas */
+function set(id, v) {
+  const el = $(id);
+  if (el) el.textContent = v ?? "—";
+  const el2 = $(id + "2");
+  if (el2) el2.textContent = v ?? "—";
 }
 
 /* ── Events ── */
@@ -269,7 +329,6 @@ $("addItemBtn").addEventListener("click", () => {
 
 $("printBtn").addEventListener("click", () => { render(); window.print(); });
 
-// ③ Tombol WhatsApp
 $("waBtn").addEventListener("click", sendWhatsApp);
 
 $("saveBtn").addEventListener("click", () => {
@@ -286,7 +345,6 @@ $("resetBtn").addEventListener("click", () => {
   localStorage.removeItem("velora_draft");
   $("invoiceForm").reset();
   ["invoiceDate","eventDate","deliveryDate","returnDate"].forEach(id => $(id).value = todayISO());
-  // ① Generate nomor baru saat reset
   bumpInvoiceCounter();
   $("invoiceNumber").value = getNextInvoiceNumber();
   items = [{ name: "Sewa papan ucapan akrilik custom", duration: "1 hari", qty: 1, price: 250000 }];
@@ -309,9 +367,7 @@ if (saved) {
   } catch { localStorage.removeItem("velora_draft"); }
 }
 
-// ① Init nomor nota
 initInvoiceNumber();
-
 renderEditor();
 render();
 initPlaceholderFields();
