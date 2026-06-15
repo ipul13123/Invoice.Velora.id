@@ -9,18 +9,16 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 <div class="shell">
 
-  <!-- EDITOR (no-print) -->
+  <!-- EDITOR -->
   <aside class="panel no-print">
     <div class="panel-brand">
       <div>
         <div class="brand-label">Velora.id</div>
-        <div class="brand-sub">Nota Digital Admin</div>
+        <div class="brand-sub">Nota Digital · Cetak 2-up 10,5×16,5 cm</div>
       </div>
     </div>
-
     <div class="btn-row">
       <button class="btn-primary" id="printBtn">🖨 Cetak 2-up</button>
       <button class="btn-wa"      id="waBtn">💬 WhatsApp</button>
@@ -29,7 +27,6 @@
     </div>
 
     <form id="invoiceForm" autocomplete="off">
-
       <fieldset>
         <legend>Detail Nota</legend>
         <div class="row2">
@@ -71,10 +68,7 @@
       </fieldset>
 
       <fieldset>
-        <legend>
-          Item Sewa
-          <button class="btn-add" type="button" id="addItemBtn">+ Tambah</button>
-        </legend>
+        <legend>Item Sewa <button class="btn-add" type="button" id="addItemBtn">+ Tambah</button></legend>
         <div id="itemsEditor"></div>
       </fieldset>
 
@@ -88,217 +82,172 @@
           <label class="span3">Rekening<textarea id="bankInfo" name="bankInfo" rows="1" placeholder="BCA 0000000000 a.n. Velora.id">BCA 0000000000 a.n. Velora.id</textarea></label>
         </div>
       </fieldset>
-
     </form>
   </aside>
 
-  <!-- INVOICE PREVIEW -->
+  <!-- PREVIEW -->
   <main class="stage">
 
-    <!-- Wrapper 2-up untuk print -->
-    <div class="print-2up">
-
-      <!-- NOTA 1 -->
-      <article class="nota" id="invoicePaper">
-
-        <div class="watermark">VELORA</div>
-
-        <header class="nota-header">
-          <div class="nota-brand">
-            <img class="nota-logo" src="logo.jpeg" alt="Logo Velora.id">
-            <div>
-              <div class="nota-name">Velora.id</div>
-              <div class="nota-tagline">Sewa Papan Ucapan Akrilik · Beauty Reflections</div>
-            </div>
-          </div>
-          <div class="nota-meta">
-            <div class="meta-label">INVOICE</div>
-            <div class="meta-number" id="previewInvoiceNumber">VEL-2026-001</div>
-            <div class="meta-date"   id="previewInvoiceDate">—</div>
-            <div class="auth-chip">
-              <span>Kode:</span>
-              <strong id="previewAuthCode">VEL-0000000</strong>
-            </div>
-          </div>
-        </header>
-
-        <div class="status-bar" id="statusBar">
-          <div class="status-item">
-            <span>Status</span>
-            <strong><span id="previewStatusChip" class="status-chip">Belum dibayar</span></strong>
-          </div>
-          <div class="status-item">
-            <span>Total</span>
-            <strong id="previewGrandTotal">Rp0</strong>
-          </div>
-          <div class="status-item">
-            <span>Sisa Bayar</span>
-            <strong id="previewRemaining">Rp0</strong>
-          </div>
-          <div class="status-item">
-            <span>Dicetak</span>
-            <strong id="previewPrintedAt">—</strong>
+    <!-- NOTA 1 -->
+    <article class="nota" id="nota1">
+      <canvas class="wm-canvas" id="wmCanvas1"></canvas>
+      <header class="nota-header">
+        <div class="nota-brand">
+          <img class="nota-logo" src="logo.jpeg" alt="Velora.id">
+          <div>
+            <div class="nota-name">Velora.id</div>
+            <div class="nota-tagline">Sewa Papan Ucapan Akrilik · Beauty Reflections</div>
           </div>
         </div>
+        <div class="nota-meta">
+          <div class="meta-label">INVOICE</div>
+          <div class="meta-number" id="n1_invNo">VEL-2026-001</div>
+          <div class="meta-date"   id="n1_invDate">—</div>
+          <div class="auth-chip"><span>Kode:</span><strong id="n1_auth">VEL-0000000</strong></div>
+        </div>
+      </header>
 
-        <div class="info-grid">
-          <div class="info-box">
-            <div class="info-title">Pelanggan</div>
-            <div class="info-strong" id="previewCustomerName">Nama Pelanggan</div>
-            <div id="previewCustomerPhone">08xxxxxxxxxx</div>
-            <div id="previewCustomerAddress">Alamat acara / pengiriman</div>
-          </div>
-          <div class="info-box">
-            <div class="info-title">Detail Sewa</div>
-            <div class="info-row"><span>Acara</span><strong id="previewEventName">—</strong></div>
-            <div class="info-row"><span>Tgl acara</span><strong id="previewEventDate">—</strong></div>
-            <div class="info-row"><span>Kirim</span><strong id="previewDeliveryDate">—</strong></div>
-            <div class="info-row"><span>Kembali</span><strong id="previewReturnDate">—</strong></div>
+      <div class="status-bar" id="n1_statusBar">
+        <div class="status-item"><span>Status</span><strong><span id="n1_statusChip" class="status-chip">Belum dibayar</span></strong></div>
+        <div class="status-item"><span>Total</span><strong id="n1_grandTotal">Rp0</strong></div>
+        <div class="status-item"><span>Sisa Bayar</span><strong id="n1_remaining">Rp0</strong></div>
+        <div class="status-item"><span>Dicetak</span><strong id="n1_printedAt">—</strong></div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="info-title">Pelanggan</div>
+          <div class="info-strong" id="n1_custName">Nama Pelanggan</div>
+          <div id="n1_custPhone">08xxxxxxxxxx</div>
+          <div id="n1_custAddr">Alamat acara / pengiriman</div>
+        </div>
+        <div class="info-box">
+          <div class="info-title">Detail Sewa</div>
+          <div class="info-row"><span>Acara</span><strong id="n1_evName">—</strong></div>
+          <div class="info-row"><span>Tgl acara</span><strong id="n1_evDate">—</strong></div>
+          <div class="info-row"><span>Kirim</span><strong id="n1_delDate">—</strong></div>
+          <div class="info-row"><span>Kembali</span><strong id="n1_retDate">—</strong></div>
+        </div>
+      </div>
+
+      <table class="item-table">
+        <thead><tr><th>Item Sewa</th><th>Durasi</th><th class="r">Qty</th><th class="r">Harga</th><th class="r">Subtotal</th></tr></thead>
+        <tbody id="n1_items"></tbody>
+      </table>
+
+      <div class="bottom-grid">
+        <div class="notes-col">
+          <div class="info-title">Catatan</div><p id="n1_notes">—</p>
+          <div class="info-title">Pembayaran</div>
+          <p id="n1_bank">—</p>
+          <p>Metode: <strong id="n1_method">—</strong></p>
+        </div>
+        <div class="totals-col">
+          <div class="total-row"><span>Subtotal</span><span id="n1_sub">Rp0</span></div>
+          <div class="total-row"><span>Ongkir / pasang</span><span id="n1_ship">Rp0</span></div>
+          <div class="total-row"><span>Diskon</span><span id="n1_disc">- Rp0</span></div>
+          <div class="total-row grand"><span>Total</span><span id="n1_total">Rp0</span></div>
+          <div class="total-row"><span>DP dibayar</span><span id="n1_dp">Rp0</span></div>
+          <div class="total-row sisa"><span>Sisa bayar</span><span id="n1_sisa">Rp0</span></div>
+        </div>
+      </div>
+
+      <div class="security-strip">
+        <span class="sec-icon">🔒</span>
+        <span>DOKUMEN RESMI VELORA.ID — Verifikasi dengan kode autentikasi di atas</span>
+        <span class="sec-code" id="n1_secCode">VEL-·-·-·</span>
+        <span class="sec-icon">🔒</span>
+      </div>
+
+      <footer class="nota-footer">
+        <p>Terima kasih telah mempercayakan momen spesial Anda kepada Velora.id 🌸</p>
+        <div class="sign-block"><span>Admin Velora.id</span></div>
+      </footer>
+    </article>
+
+    <!-- GARIS POTONG -->
+    <div class="cut-line no-print">✂</div>
+    <div class="cut-line" style="display:none" id="printCutLine">✂</div>
+
+    <!-- NOTA 2 (copy) -->
+    <article class="nota" id="nota2">
+      <canvas class="wm-canvas" id="wmCanvas2"></canvas>
+      <header class="nota-header">
+        <div class="nota-brand">
+          <img class="nota-logo" src="logo.jpeg" alt="Velora.id">
+          <div>
+            <div class="nota-name">Velora.id</div>
+            <div class="nota-tagline">Sewa Papan Ucapan Akrilik · Beauty Reflections</div>
           </div>
         </div>
-
-        <table class="item-table">
-          <thead>
-            <tr>
-              <th>Item Sewa</th>
-              <th>Durasi</th>
-              <th class="r">Qty</th>
-              <th class="r">Harga</th>
-              <th class="r">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody id="previewItems"></tbody>
-        </table>
-
-        <div class="bottom-grid">
-          <div class="notes-col">
-            <div class="info-title">Catatan</div>
-            <p id="previewNotes">—</p>
-            <div class="info-title">Pembayaran</div>
-            <p id="previewBankInfo">—</p>
-            <p>Metode: <strong id="previewPaymentMethod">—</strong></p>
-          </div>
-          <div class="totals-col">
-            <div class="total-row"><span>Subtotal</span><span id="previewSubtotal">Rp0</span></div>
-            <div class="total-row"><span>Ongkir / pasang</span><span id="previewShipping">Rp0</span></div>
-            <div class="total-row"><span>Diskon</span><span id="previewDiscount">- Rp0</span></div>
-            <div class="total-row grand"><span>Total</span><span id="previewTotal">Rp0</span></div>
-            <div class="total-row"><span>DP dibayar</span><span id="previewDownPayment">Rp0</span></div>
-            <div class="total-row sisa"><span>Sisa bayar</span><span id="previewRemainingBottom">Rp0</span></div>
-          </div>
+        <div class="nota-meta">
+          <div class="meta-label">INVOICE</div>
+          <div class="meta-number" id="n2_invNo">VEL-2026-001</div>
+          <div class="meta-date"   id="n2_invDate">—</div>
+          <div class="auth-chip"><span>Kode:</span><strong id="n2_auth">VEL-0000000</strong></div>
         </div>
+      </header>
 
-        <footer class="nota-footer">
-          <p>Terima kasih telah mempercayakan momen spesial Anda kepada Velora.id 🌸</p>
-          <div class="sign-block"><span>Admin Velora.id</span></div>
-        </footer>
+      <div class="status-bar" id="n2_statusBar">
+        <div class="status-item"><span>Status</span><strong><span id="n2_statusChip" class="status-chip">Belum dibayar</span></strong></div>
+        <div class="status-item"><span>Total</span><strong id="n2_grandTotal">Rp0</strong></div>
+        <div class="status-item"><span>Sisa Bayar</span><strong id="n2_remaining">Rp0</strong></div>
+        <div class="status-item"><span>Dicetak</span><strong id="n2_printedAt">—</strong></div>
+      </div>
 
-      </article>
-
-      <!-- GARIS POTONG -->
-      <hr class="print-divider no-print-hidden">
-
-      <!-- NOTA 2 (duplikat — diisi JS) -->
-      <article class="nota" id="invoicePaper2">
-
-        <div class="watermark">VELORA</div>
-
-        <header class="nota-header">
-          <div class="nota-brand">
-            <img class="nota-logo" src="logo.jpeg" alt="Logo Velora.id">
-            <div>
-              <div class="nota-name">Velora.id</div>
-              <div class="nota-tagline">Sewa Papan Ucapan Akrilik · Beauty Reflections</div>
-            </div>
-          </div>
-          <div class="nota-meta">
-            <div class="meta-label">INVOICE</div>
-            <div class="meta-number" id="previewInvoiceNumber2">VEL-2026-001</div>
-            <div class="meta-date"   id="previewInvoiceDate2">—</div>
-            <div class="auth-chip">
-              <span>Kode:</span>
-              <strong id="previewAuthCode2">VEL-0000000</strong>
-            </div>
-          </div>
-        </header>
-
-        <div class="status-bar" id="statusBar2">
-          <div class="status-item">
-            <span>Status</span>
-            <strong><span id="previewStatusChip2" class="status-chip">Belum dibayar</span></strong>
-          </div>
-          <div class="status-item">
-            <span>Total</span>
-            <strong id="previewGrandTotal2">Rp0</strong>
-          </div>
-          <div class="status-item">
-            <span>Sisa Bayar</span>
-            <strong id="previewRemaining2">Rp0</strong>
-          </div>
-          <div class="status-item">
-            <span>Dicetak</span>
-            <strong id="previewPrintedAt2">—</strong>
-          </div>
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="info-title">Pelanggan</div>
+          <div class="info-strong" id="n2_custName">Nama Pelanggan</div>
+          <div id="n2_custPhone">08xxxxxxxxxx</div>
+          <div id="n2_custAddr">Alamat acara / pengiriman</div>
         </div>
-
-        <div class="info-grid">
-          <div class="info-box">
-            <div class="info-title">Pelanggan</div>
-            <div class="info-strong" id="previewCustomerName2">Nama Pelanggan</div>
-            <div id="previewCustomerPhone2">08xxxxxxxxxx</div>
-            <div id="previewCustomerAddress2">Alamat acara / pengiriman</div>
-          </div>
-          <div class="info-box">
-            <div class="info-title">Detail Sewa</div>
-            <div class="info-row"><span>Acara</span><strong id="previewEventName2">—</strong></div>
-            <div class="info-row"><span>Tgl acara</span><strong id="previewEventDate2">—</strong></div>
-            <div class="info-row"><span>Kirim</span><strong id="previewDeliveryDate2">—</strong></div>
-            <div class="info-row"><span>Kembali</span><strong id="previewReturnDate2">—</strong></div>
-          </div>
+        <div class="info-box">
+          <div class="info-title">Detail Sewa</div>
+          <div class="info-row"><span>Acara</span><strong id="n2_evName">—</strong></div>
+          <div class="info-row"><span>Tgl acara</span><strong id="n2_evDate">—</strong></div>
+          <div class="info-row"><span>Kirim</span><strong id="n2_delDate">—</strong></div>
+          <div class="info-row"><span>Kembali</span><strong id="n2_retDate">—</strong></div>
         </div>
+      </div>
 
-        <table class="item-table">
-          <thead>
-            <tr>
-              <th>Item Sewa</th>
-              <th>Durasi</th>
-              <th class="r">Qty</th>
-              <th class="r">Harga</th>
-              <th class="r">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody id="previewItems2"></tbody>
-        </table>
+      <table class="item-table">
+        <thead><tr><th>Item Sewa</th><th>Durasi</th><th class="r">Qty</th><th class="r">Harga</th><th class="r">Subtotal</th></tr></thead>
+        <tbody id="n2_items"></tbody>
+      </table>
 
-        <div class="bottom-grid">
-          <div class="notes-col">
-            <div class="info-title">Catatan</div>
-            <p id="previewNotes2">—</p>
-            <div class="info-title">Pembayaran</div>
-            <p id="previewBankInfo2">—</p>
-            <p>Metode: <strong id="previewPaymentMethod2">—</strong></p>
-          </div>
-          <div class="totals-col">
-            <div class="total-row"><span>Subtotal</span><span id="previewSubtotal2">Rp0</span></div>
-            <div class="total-row"><span>Ongkir / pasang</span><span id="previewShipping2">Rp0</span></div>
-            <div class="total-row"><span>Diskon</span><span id="previewDiscount2">- Rp0</span></div>
-            <div class="total-row grand"><span>Total</span><span id="previewTotal2">Rp0</span></div>
-            <div class="total-row"><span>DP dibayar</span><span id="previewDownPayment2">Rp0</span></div>
-            <div class="total-row sisa"><span>Sisa bayar</span><span id="previewRemainingBottom2">Rp0</span></div>
-          </div>
+      <div class="bottom-grid">
+        <div class="notes-col">
+          <div class="info-title">Catatan</div><p id="n2_notes">—</p>
+          <div class="info-title">Pembayaran</div>
+          <p id="n2_bank">—</p>
+          <p>Metode: <strong id="n2_method">—</strong></p>
         </div>
+        <div class="totals-col">
+          <div class="total-row"><span>Subtotal</span><span id="n2_sub">Rp0</span></div>
+          <div class="total-row"><span>Ongkir / pasang</span><span id="n2_ship">Rp0</span></div>
+          <div class="total-row"><span>Diskon</span><span id="n2_disc">- Rp0</span></div>
+          <div class="total-row grand"><span>Total</span><span id="n2_total">Rp0</span></div>
+          <div class="total-row"><span>DP dibayar</span><span id="n2_dp">Rp0</span></div>
+          <div class="total-row sisa"><span>Sisa bayar</span><span id="n2_sisa">Rp0</span></div>
+        </div>
+      </div>
 
-        <footer class="nota-footer">
-          <p>Terima kasih telah mempercayakan momen spesial Anda kepada Velora.id 🌸</p>
-          <div class="sign-block"><span>Admin Velora.id</span></div>
-        </footer>
+      <div class="security-strip">
+        <span class="sec-icon">🔒</span>
+        <span>DOKUMEN RESMI VELORA.ID — Verifikasi dengan kode autentikasi di atas</span>
+        <span class="sec-code" id="n2_secCode">VEL-·-·-·</span>
+        <span class="sec-icon">🔒</span>
+      </div>
 
-      </article>
+      <footer class="nota-footer">
+        <p>Terima kasih telah mempercayakan momen spesial Anda kepada Velora.id 🌸</p>
+        <div class="sign-block"><span>Admin Velora.id</span></div>
+      </footer>
+    </article>
 
-    </div><!-- /print-2up -->
   </main>
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>
