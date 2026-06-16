@@ -245,7 +245,18 @@ function render() {
 /* ── Events ── */
 $("invoiceForm").addEventListener("input",  render);
 $("invoiceForm").addEventListener("change", render);
-
+$("paymentStatus").addEventListener("change", function () {
+  if (this.value === "Lunas") {
+    const sub   = items.reduce((s, it) => s + num(it.qty) * num(it.price), 0);
+    const ship  = num(val("shippingFee"));
+    const disc  = num(val("discount"));
+    const total = Math.max(sub + ship - disc, 0);
+    $("downPayment").value = total;
+  } else if (this.value === "Belum dibayar") {
+    $("downPayment").value = 0;
+  }
+  render();
+});
 $("itemsEditor").addEventListener("input", (e) => {
   const el = e.target;
   const i = Number(el.dataset.i), f = el.dataset.f;
