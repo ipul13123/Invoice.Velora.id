@@ -90,7 +90,7 @@ function buildWAMessage() {
   const disc = num(val("discount"));
   const dp   = num(val("downPayment"));
   const total = Math.max(sub + ship - disc, 0);
-  const sisa  = Math.max(total - dp, 0);
+  const sisa  = status === "Lunas" ? 0 : Math.max(total - dp, 0);
 
   const itemLines = items.map(it =>
     `  • ${it.name} (${it.duration}) x${it.qty} = ${rp.format(num(it.qty)*num(it.price))}`
@@ -195,7 +195,8 @@ function render() {
   const disc  = num(val("discount"));
   const dp    = num(val("downPayment"));
   const total = Math.max(sub + ship - disc, 0);
-  const sisa  = Math.max(total - dp, 0);
+  const statusVal2 = val("paymentStatus");
+  const sisa  = statusVal2 === "Lunas" ? 0 : Math.max(total - dp, 0);
 
   const payload = JSON.stringify({ inv: val("invoiceNumber"), date: val("invoiceDate"), cust: val("customerName"), total, sisa, items });
   const code = authCode(payload);
