@@ -193,20 +193,21 @@ textarea { resize: vertical; }
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) rotate(-20deg);
-  font-size: 100px;
+  font-size: 110px;
   font-weight: 900;
   letter-spacing: -0.04em;
   color: var(--rose);
-  opacity: 0.10;
+  opacity: 0.18;
   pointer-events: none;
   user-select: none;
   white-space: nowrap;
-  z-index: 0;
+  z-index: 100;
   text-align: center;
   line-height: 1.4;
+  mix-blend-mode: multiply;
 }
 
-.nota > * { position: relative; z-index: 1; }
+.nota > *:not(.watermark) { position: relative; z-index: 1; }
 
 /* NOTA HEADER */
 .nota-header {
@@ -420,7 +421,7 @@ textarea { resize: vertical; }
     font-size: 10px;
   }
 
-  .watermark { font-size: 90px; opacity: 0.08; }
+  .watermark { font-size: 90px; opacity: 0.15; mix-blend-mode: multiply; z-index: 100; }
   .nota-header { padding-bottom: 8px; margin-bottom: 8px; }
   .nota-logo { width: 38px; height: 38px; }
   .nota-name { font-size: 16px; }
